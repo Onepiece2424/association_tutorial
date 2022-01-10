@@ -1,13 +1,21 @@
 class TweetsController < ApplicationController
+  before_action :authenticate_user!, except: [:index]
   def new
-  end
-
-  def index
-  end
-
-  def show
+    @tweet = Tweet.new
   end
 
   def create
+    @tweet = Tweet.new(tweet_params)
+    @tweet.user_id = current_user.id
+    @tweet.save
+    redirect_to tweets_path
+  end
+
+  def index
+    @tweets = Tweet.all
+  end
+
+  def show
+    @tweet = Tweet.find(params[:id])
   end
 end
